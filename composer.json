@@ -1,0 +1,13 @@
+{
+    "name": "gaurav/advance_php",
+    "authors": [
+        {
+            "name": "Gaurav Gupta",
+            "email": "gaurav.gipta@innoraft.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "phpmailer/phpmailer": "^6.7"
+}
+}
