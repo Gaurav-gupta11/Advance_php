@@ -1,62 +1,87 @@
 <?php
 
-require_once 'vendor/autoload.php'; // include Composer autoload file
-use GuzzleHttp\Client;
+// Include the services file.
+include("services.php");
 
-// define the Service class with properties for id, title, description, and image_url
-class Service {
-    public $id;
-    public $title;
-    public $image_url;
-
-    public function __construct($id, $title, $image_url) {
-        $this->id = $id;
-        $this->title = $title;
-        $this->image_url = $image_url;
-    }
-}
-
-// fetch the JSON data from the Innoraft API using GuzzleHttp
-$client = new Client(['base_uri' => 'https://ir-dev-d9.innoraft-sites.com/']);
-$response = $client->get('jsonapi/node/services');
-$data = json_decode($response->getBody(), true);
-
-// extract the relevant data from the JSON response and create Service objects
-$services = array();
-foreach ($data['data'] as $service) {
-    $id = $service['id'];
-    $title = $service['attributes']['title'];
-    $uri_url = $service['relationships']['field_image']['links']['related']['href'];;
-    
-    // fetch the second JSON file using GuzzleHttp
-    $response = $client->get($uri_url);
-    $data = json_decode($response->getBody(), true);
-    
-    // extract the image URL from the second JSON file
-    $image_url = $data['data']['attributes']['uri']['url'];
-    $services[] = new Service($id, $title, $image_url);
-}
-
-// render the HTML page with the services displayed in a grid format
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Innoraft Services</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-       
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1 style="text-align: center;">Innoraft Services</h1>
-        <?php foreach ($services as $service): ?>
+            
+        <?php 
+        $i=0;
+        foreach ($services as $service): 
+
+            // Alternate the services layout based on odd or even.
+            if($i%2 == 0){
+        ?>
             <div class="service">
-            <img src="https://ir-dev-d9.innoraft-sites.com<?php echo $service->image_url; ?>" alt="<?php echo $service->title; ?>">
-                <h2><?php echo $service->title; ?></h2>
+                <div class="service-rv--content">
+                    <div><?php echo $service->fieldsecondary; ?></div>
+
+                    <div class="icon">
+                        <?php 
+                        // Loop through the icons and display them.
+                        foreach ($service->icons as $icon) {?>
+                            <img src="https://ir-dev-d9.innoraft-sites.com<?php echo $icon; ?>" alt="">
+                        <?php } ?>    
+                    </div>
+            
+                    <div class="service-list">
+                        <ul><?php echo $service->fieldservice; ?></ul>
+                    </div>
+
+                    <div class="cta-link">
+                        <a class="btn" href="">Explore More</a>
+                    </div>
+                </div>
+
+                <div>
+                    <img src="https://ir-dev-d9.innoraft-sites.com<?php echo $service->image_url; ?>" alt="">
+                </div>
             </div>
-        <?php endforeach; ?>
+
+        <?php 
+            } else {
+        ?>
+
+            <div class="service">
+                <div>
+                    <img src="https://ir-dev-d9.innoraft-sites.com<?php echo $service->image_url; ?>" alt="">
+                </div>
+
+                <div class="service-rv--content">
+                    <div><?php echo $service->fieldsecondary; ?></div>
+            
+                    <div class="icon">
+                        <?php 
+                        // Loop through the icons and display them.
+                        foreach ($service->icons as $icon) {?>
+                            <img src="https://ir-dev-d9.innoraft-sites.com<?php echo $icon; ?>" alt="">
+                        <?php } ?>    
+                    </div>
+
+                    <div class="service-list">
+                        <ul><?php echo $service->fieldservice; ?></ul>
+                    </div>
+            
+                    <div class="cta-link">
+                        <a class="btn" href="">Explore More</a>
+                    </div>
+                </div>         
+            </div>
+
+        <?php 
+            }
+            $i++;
+        endforeach; 
+        ?>
     </div>
 </body>
 </html>
