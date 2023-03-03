@@ -6,98 +6,123 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 
 /**
- * Class Mailer
+ * Defines a Mailer class.
  */
-class Mailer
-{
-    /**
-     * @var string $host
-     */
-    private string $host;
+class Mailer {
 
-    /**
-     * @var bool $smtpAuth
-     */
-    private bool $smtpAuth;
+  /**
+   * The SMTP host name.
+   *
+   * @var string
+   */
+  private string $host;
 
-    /**
-     * @var string $username
-     */
-    private string $username;
+  /**
+   * Indicates whether SMTP authentication is required.
+   *
+   * @var bool
+   */
+  private bool $smtpAuth;
 
-    /**
-     * @var string $password
-     */
-    private string $password;
+  /**
+   * The username used for SMTP authentication.
+   *
+   * @var string
+   */
+  private string $username;
 
-    /**
-     * @var string $smtpSecure
-     */
-    private string $smtpSecure;
+  /**
+   * The password used for SMTP authentication.
+   *
+   * @var string
+   */
+  private string $password;
 
-    /**
-     * @var int $port
-     */
-    private int $port;
+  /**
+   * The SMTP encryption type.
+   *
+   * @var string
+   */
+  private string $smtpSecure;
 
-    /**
-     * Mailer constructor.
-     * @param string $host
-     * @param bool $smtpAuth
-     * @param string $username
-     * @param string $password
-     * @param string $smtpSecure
-     * @param int $port
-     */
-    public function __construct($host, $smtpAuth,  $username,  $password,  $smtpSecure, int $port)
-    {
-        $this->host = $host;
-        $this->smtpAuth = $smtpAuth;
-        $this->username = $username;
-        $this->password = $password;
-        $this->smtpSecure = $smtpSecure;
-        $this->port = $port;
-    }
+  /**
+   * The SMTP port number.
+   *
+   * @var int
+   */
+  private int $port;
 
-    /**
-     * @param  $from
-     * @param  $to
-     * @param  $body
-     * @throws Exception
-     */
-    public function send($from,  $to,  $body)
-    {
-        $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = $this->host;
-        $mail->SMTPAuth = $this->smtpAuth;
-        $mail->Username = $this->username;
-        $mail->Password = $this->password;
-        $mail->SMTPSecure = $this->smtpSecure;
-        $mail->Port = $this->port;
+  /**
+   * Mailer constructor.
+   *
+   * @param string $host
+   *   The SMTP host name.
+   * @param bool $smtpAuth
+   *   Indicates whether SMTP authentication is required.
+   * @param string $username
+   *   The username used for SMTP authentication.
+   * @param string $password
+   *   The password used for SMTP authentication.
+   * @param string $smtpSecure
+   *   The SMTP encryption type.
+   * @param int $port
+   *   The SMTP port number.
+   */
+  public function __construct(string $host, bool $smtpAuth, string $username, string $password, string $smtpSecure, int $port) {
+    $this->host = $host;
+    $this->smtpAuth = $smtpAuth;
+    $this->username = $username;
+    $this->password = $password;
+    $this->smtpSecure = $smtpSecure;
+    $this->port = $port;
+  }
 
-        $mail->setFrom($from);
-        $mail->addAddress($to);
-        $mail->isHTML(true);
-        $mail->Body = $body;
+  /**
+   * Sends an email message.
+   *
+   * @param string $from
+   *   The email address of the sender.
+   * @param string $to
+   *   The email address of the recipient.
+   * @param string $body
+   *   The message body.
+   *
+   * @throws Exception
+   *   Thrown if an error occurs while sending the email.
+   */
+  public function send(string $from, string $to, string $body): void {
+    $mail = new PHPMailer(true);
+    $mail->isSMTP();
+    $mail->Host = $this->host;
+    $mail->SMTPAuth = $this->smtpAuth;
+    $mail->Username = $this->username;
+    $mail->Password = $this->password;
+    $mail->SMTPSecure = $this->smtpSecure;
+    $mail->Port = $this->port;
 
-        $mail->send();
-    }
+    $mail->setFrom($from);
+    $mail->addAddress($to);
+    $mail->isHTML(true);
+    $mail->Body = $body;
+
+    $mail->send();
+  }
+
 }
 
-if(isset($_POST["submit"])){
-    $mailer = new Mailer('smtp.gmail.com', true, 'gauravrocksd5@gmail.com', 'aoculiwjcnrqixfv', 'ssl', 465);
+if(isset($_POST["submit"])) {
+  $mailer = new Mailer('smtp.gmail.com', true, 'gauravrocksd5@gmail.com', 'aoculiwjcnrqixfv', 'ssl', 465);
 
-    $from = 'gauravrocksd5@gmail.com';
-    $to = $_POST["email"];
-    $body = $_POST["message"];
+  $from = 'gauravrocksd5@gmail.com';
+  $to = $_POST["email"];
+  $body = $_POST["message"];
 
-    $mailer->send($from, $to, $body);
+  $mailer->send($from, $to, $body);
 
-    echo "
-    <script>
-    alert('Sent successfullly');
-    document.location.href = 'i.php';
-    </script>
+  echo "
+  <script>
+  alert('Sent successfullly');
+  </script>
     ";
 }
+?>
