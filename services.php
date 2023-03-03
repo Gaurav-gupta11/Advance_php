@@ -91,8 +91,8 @@ class Service {
             $service = $last_four[$i];
 
             // Initialize variables to hold the image URL, icons, and field values
-            // Initialize the image URL variable
-            $image_url = "";
+            // Initialize the image URL variable  FT2023-72_Task7
+
             // Initialize the icons array
             $icons = [];
             // Get the URL for the service's image data
@@ -138,7 +138,7 @@ class Service {
             $services[] = new Service($image_url, $icons, $fieldsecondary, $fieldservice);
         }
 
-                    return $services;
+			return $services;
     }
 }
 
